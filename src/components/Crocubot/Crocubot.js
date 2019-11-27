@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import './Crocubot.css'
 import $ from 'jquery';
+import axios from 'axios';
 
 const Crocubot = ({ }) => {
 
@@ -16,7 +17,7 @@ const Crocubot = ({ }) => {
     var messages = element.find('.messages');
     var textInput = element.find('.text-box');
     console.log(element)
-    if (chatStatus === 'closed') toggle();  
+    if (chatStatus === 'closed') toggle();
     element.find('.chat').addClass('enter');
     textInput.keydown(onMetaAndEnter).prop("disabled", false).focus();
     element.find('.header button').click(closeElement);
@@ -24,6 +25,32 @@ const Crocubot = ({ }) => {
     messages.scrollTop(messages.prop("scrollHeight"));
   }
 
+  const appendMessage = (message, sender) => {
+
+    var messagesContainer = $('.messages');
+
+    messagesContainer.append([
+      `<li class="${sender}">`,
+      message,
+      '</li>'
+    ].join(''));
+
+    var userInput = $('.text-box');
+    userInput.html('');
+    userInput.focus();
+
+    messagesContainer.finish().animate({
+      scrollTop: messagesContainer.prop("scrollHeight")
+    }, 250);
+  }
+
+  const processMessage = (message) => {
+    axios.post('http://localhost:5000/chat', {
+      "message": message
+    }).then(res => {
+      appendMessage(res.data, 'other')
+    })
+  }
 
   const sendNewMessage = () => {
     var userInput = $('.text-box');
@@ -31,20 +58,8 @@ const Crocubot = ({ }) => {
 
     if (!newMessage) return;
 
-    var messagesContainer = $('.messages');
-
-    messagesContainer.append([
-      '<li class="self">',
-      newMessage,
-      '</li>'
-    ].join(''));
-
-    userInput.html('');
-    userInput.focus();
-
-    messagesContainer.finish().animate({
-      scrollTop: messagesContainer.prop("scrollHeight")
-    }, 250);
+    appendMessage(newMessage, 'self');
+    processMessage(newMessage);
   }
 
   const onMetaAndEnter = (event) => {
@@ -58,7 +73,7 @@ const Crocubot = ({ }) => {
     if (!e) var e = window.event;
     e.cancelBubble = true;
     if (e.stopPropagation) e.stopPropagation();
-    
+
     let element = $('.floating-chat');
 
     element.find('.chat').removeClass('enter').hide();
@@ -88,7 +103,7 @@ const Crocubot = ({ }) => {
         </ul>
         <div className="footer">
           <div className="text-box" contentEditable="true" disabled={true}></div>
-          <button id="sendMessage">send</button>
+          <button id="sendMessage">Enviar</button>
         </div>
       </div>
     </div>
