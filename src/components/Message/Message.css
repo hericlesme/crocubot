@@ -1,0 +1,54 @@
+.messages li {
+  position: relative;
+  clear: both;
+  display: inline-block;
+  padding: 14px;
+  margin: 0 0 20px 0;
+  font: 12px/16px 'Noto Sans', sans-serif;
+  border-radius: 10px;
+  background-color: #515E54AA;
+  word-wrap: break-word;
+  max-width: 81%; }
+  .messages li:before {
+    position: absolute;
+    top: 0;
+    width: 25px;
+    height: 25px;
+    border-radius: 25px;
+    content: '';
+    background-size: cover; }
+  .messages li:after {
+    position: absolute;
+    top: 10px;
+    content: '';
+    width: 0;
+    height: 0;
+    border-top: 10px solid #515E54AA; }
+
+.messages li.self {
+  animation: show-chat-odd 0.15s 1 ease-in;
+  -moz-animation: show-chat-odd 0.15s 1 ease-in;
+  -webkit-animation: show-chat-odd 0.15s 1 ease-in;
+  float: right;
+  margin-right: 45px;
+  color: white; }
+  .messages li.self:before {
+    right: -45px;
+    background-image: url(https://github.com/hericlesme.png); }
+  .messages li.self:after {
+    border-right: 10px solid transparent;
+    right: -10px; }
+
+.messages li.other {
+  animation: show-chat-even 0.15s 1 ease-in;
+  -moz-animation: show-chat-even 0.15s 1 ease-in;
+  -webkit-animation: show-chat-even 0.15s 1 ease-in;
+  float: left;
+  margin-left: 45px;
+  color: white; }
+  .messages li.other:before {
+    left: -45px;
+    background-image: url("../../assets//img/crocubot_user.png"); }
+  .messages li.other:after {
+    border-left: 10px solid transparent;
+    left: -10px; }

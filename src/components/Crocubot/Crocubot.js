@@ -1,22 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import './Crocubot.css'
 import $ from 'jquery';
 import axios from 'axios';
+import Message from "../Message/Message";
 
 const Crocubot = ({ }) => {
 
-  let [chatStatus, toggleExpansion] = useState("closed");
-
+  const [chatStatus, toggleExpansion] = useState("closed");
+  const [input, setInput] = useState('');
+  const [messageData, updateMessages] = useState([]);
 
   const toggle = () => {
     toggleExpansion(chatStatus === 'closed' ? 'expanded' : 'closed');
   }
 
+  useEffect(() => {
+    updateMessages(messageData => [...messageData, { 'sender': 'other', 'text': 'Olá! Posso ajudar?' }]);
+  }, []);
+
   const openElement = (e) => {
     let element = $('.floating-chat');
     var messages = element.find('.messages');
     var textInput = element.find('.text-box');
-    console.log(element)
     if (chatStatus === 'closed') toggle();
     element.find('.chat').addClass('enter');
     textInput.keydown(onMetaAndEnter).prop("disabled", false).focus();
@@ -25,16 +30,13 @@ const Crocubot = ({ }) => {
     messages.scrollTop(messages.prop("scrollHeight"));
   }
 
-  const appendMessage = (message, sender) => {
+  const appendMessage = (message) => {
 
-    var messagesContainer = $('.messages');
+    let messagesContainer = $('.messages');
 
-    messagesContainer.append([
-      `<li class="${sender}">`,
-      message,
-      '</li>'
-    ].join(''));
+    updateMessages(messageData => [...messageData, message]);
 
+    console.log(messageData);
     var userInput = $('.text-box');
     userInput.html('');
     userInput.focus();
@@ -45,10 +47,14 @@ const Crocubot = ({ }) => {
   }
 
   const processMessage = (message) => {
+    // loading();
     axios.post('http://localhost:5000/chat', {
       "message": message
     }).then(res => {
-      appendMessage(res.data, 'other')
+      appendMessage({
+        sender: 'other',
+        text: res.data
+      })
     })
   }
 
@@ -58,7 +64,12 @@ const Crocubot = ({ }) => {
 
     if (!newMessage) return;
 
-    appendMessage(newMessage, 'self');
+    let message = {
+      sender: 'self',
+      text: newMessage
+    }
+
+    appendMessage(message);
     processMessage(newMessage);
   }
 
@@ -97,9 +108,14 @@ const Crocubot = ({ }) => {
           <button onClick={closeElement}>
             <i className="fa fa-times" aria-hidden="true"></i>
           </button>
-
         </div>
         <ul className="messages">
+          {messageData.map((message, index) => (
+            <Message
+              key={index}
+              sender={message.sender}
+              text={message.text} />
+          ))}
         </ul>
         <div className="footer">
           <div className="text-box" contentEditable="true" disabled={true}></div>

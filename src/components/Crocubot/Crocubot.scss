@@ -1,47 +1,5 @@
-// Variables
-// --------------------------------------
-$scrollbar-width: 5px;
-$chat-thread-bgd-color: #515E54AA;
-$chat-thread-msg-arrow-size: 10px;
-$chat-thread-avatar-size: 25px;
-$chat-thread-offset: #{$chat-thread-avatar-size + 20px};
-$default-shadow-color: rgb(0, 0, 0);
-
-// Mixins
-// --------------------------------------
-@mixin fancy-background() {
-    background: -moz-linear-gradient(-45deg, #5BC980 0, #5BC980 25%, #5BC980 50%, #5BC980 75%, rgb(65, 145, 91) 100%);
-    background: -webkit-linear-gradient(-45deg, #5BC980 0, #5BC980 25%, #5BC980 50%, #5BC980 75%, rgb(65, 145, 91) 100%);
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-}
-
-@mixin fancy-scrollbar() {
-    &::-webkit-scrollbar {
-        width: $scrollbar-width;
-    }
-    &::-webkit-scrollbar-track {
-        border-radius: $scrollbar-width;
-        background-color: rgba(25, 147, 147, 0.1);
-    }
-    &::-webkit-scrollbar-thumb {
-        border-radius: $scrollbar-width;
-        background-color: $chat-thread-bgd-color;
-    }
-}
-
-@mixin scrolling-shadows($background-color: transparent, $shadow-intensity: 0.5, $shadow-color: $default-shadow-color, $cover-size: 40px, $shadow-size: 14px) {
-    // Shadow covers
-    background: linear-gradient($background-color 30%, rgba($background-color, 0)), linear-gradient(rgba($background-color, 0), $background-color 70%) 0 100%, radial-gradient(50% 0, farthest-side, rgba($shadow-color, $shadow-intensity), rgba($shadow-color, 0)), radial-gradient(50% 100%, farthest-side, rgba($shadow-color, $shadow-intensity), rgba($shadow-color, 0)) 0 100%;
-    background: linear-gradient($background-color 30%, rgba($background-color, 0)), linear-gradient(rgba($background-color, 0), $background-color 70%) 0 100%, radial-gradient(farthest-side at 50% 0, rgba($shadow-color, $shadow-intensity), rgba($shadow-color, 0));
-    // also add button shadow:
-    //radial-gradient(farthest-side at 50% 100%, rgba($shadow-color,$shadow-intensity), rgba($shadow-color,0)) 0 100%;
-    background-repeat: no-repeat;
-    background-color: $background-color;
-    background-size: 100% $cover-size, 100% $cover-size, 100% $shadow-size, 100% $shadow-size;
-    // Opera doesn't support this in the shorthand
-    background-attachment: local, local, scroll, scroll;
-}
+@import '../../variables.scss';
+@import '../../mixins.scss';
 
 .floating-chat {
     cursor: pointer;
@@ -133,69 +91,6 @@ $default-shadow-color: rgb(0, 0, 0);
             border-radius: 4px;
             background: transparent;
             @include fancy-scrollbar;
-            li {
-                position: relative;
-                clear: both;
-                display: inline-block;
-                padding: 14px;
-                margin: 0 0 20px 0;
-                font: 12px/16px 'Noto Sans', sans-serif;
-                border-radius: 10px;
-                background-color: $chat-thread-bgd-color;
-                word-wrap: break-word;
-                max-width: 81%;
-                &:before {
-                    position: absolute;
-                    top: 0;
-                    width: $chat-thread-avatar-size;
-                    height: $chat-thread-avatar-size;
-                    border-radius: $chat-thread-avatar-size;
-                    content: '';
-                    background-size: cover;
-                }
-                &:after {
-                    position: absolute;
-                    top: $chat-thread-msg-arrow-size;
-                    content: '';
-                    width: 0;
-                    height: 0;
-                    border-top: $chat-thread-msg-arrow-size solid $chat-thread-bgd-color;
-                }
-            }
-            li.self {
-                animation: show-chat-odd 0.15s 1 ease-in;
-                -moz-animation: show-chat-odd 0.15s 1 ease-in;
-                -webkit-animation: show-chat-odd 0.15s 1 ease-in;
-                float: right;
-                margin-right: $chat-thread-offset;
-                color: white;
-            }
-            li.self:before {
-                right: -$chat-thread-offset;
-                // Placeholder avatar 1
-                background-image: url(https://github.com/hericlesme.png);
-            }
-            li.self:after {
-                border-right: $chat-thread-msg-arrow-size solid transparent;
-                right: -$chat-thread-msg-arrow-size;
-            }
-            li.other {
-                animation: show-chat-even 0.15s 1 ease-in;
-                -moz-animation: show-chat-even 0.15s 1 ease-in;
-                -webkit-animation: show-chat-even 0.15s 1 ease-in;
-                float: left;
-                margin-left: $chat-thread-offset;
-                color: white;
-            }
-            li.other:before {
-                left: -$chat-thread-offset;
-                // Placeholder avatar 2
-                background-image: url('../../assets//img/crocubot_user.png');
-            }
-            li.other:after {
-                border-left: $chat-thread-msg-arrow-size solid transparent;
-                left: -$chat-thread-msg-arrow-size;
-            }
         }
         .footer {
             flex-shrink: 0;
