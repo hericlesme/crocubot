@@ -12,8 +12,7 @@
   transition: all 250ms ease-out;
   border-radius: 50%;
   opacity: 1;
-  background: -moz-linear-gradient(-45deg, #5BC980 0, #5BC980 25%, #5BC980 50%, #5BC980 75%, #41915b 100%);
-  background: -webkit-linear-gradient(-45deg, #5BC980 0, #5BC980 25%, #5BC980 50%, #5BC980 75%, #41915b 100%);
+  background: #5BC980;
   background-repeat: no-repeat;
   background-attachment: fixed; }
   .floating-chat.enter:hover {
@@ -87,7 +86,7 @@
         background-color: rgba(25, 147, 147, 0.1); }
       .floating-chat .chat .messages::-webkit-scrollbar-thumb {
         border-radius: 5px;
-        background-color: #515E54AA; }
+        background-color: #00000055; }
     .floating-chat .chat .footer {
       flex-shrink: 0;
       display: flex;
@@ -96,7 +95,7 @@
       background: transparent; }
       .floating-chat .chat .footer .text-box {
         border-radius: 3px;
-        background: #515E54AA;
+        background: #00000055;
         min-height: 100%;
         width: 100%;
         margin-right: 5px;
@@ -110,7 +109,7 @@
           background-color: rgba(25, 147, 147, 0.1); }
         .floating-chat .chat .footer .text-box::-webkit-scrollbar-thumb {
           border-radius: 5px;
-          background-color: #515E54AA; }
+          background-color: #00000055; }
 
 @keyframes show-chat-even {
   0% {

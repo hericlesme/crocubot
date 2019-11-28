@@ -4,19 +4,30 @@ import $ from 'jquery';
 import axios from 'axios';
 import Message from "../Message/Message";
 
-const Crocubot = ({ }) => {
+const Crocubot = ({ color, name }) => {
 
   const [chatStatus, toggleExpansion] = useState("closed");
-  const [input, setInput] = useState('');
+  const [botName, setName] = useState('Crocubot');
   const [messageData, updateMessages] = useState([]);
 
   const toggle = () => {
     toggleExpansion(chatStatus === 'closed' ? 'expanded' : 'closed');
   }
 
+
+  const updateTheme = (color, name) => {
+    if (color) {
+      let chat = document.querySelector('.floating-chat');
+      chat.style.setProperty("background", color);
+    }
+
+    if (name) setName(name);
+  }
+
   useEffect(() => {
+    updateTheme(color, name);
     updateMessages(messageData => [...messageData, { 'sender': 'other', 'text': 'Olá! Posso ajudar?' }]);
-  }, []);
+  }, [color, name]);
 
   const openElement = (e) => {
     let element = $('.floating-chat');
@@ -74,14 +85,14 @@ const Crocubot = ({ }) => {
   }
 
   const onMetaAndEnter = (event) => {
-    if ((event.metaKey || event.ctrlKey) && event.keyCode == 13) {
+    if ((event.metaKey || event.ctrlKey) && event.keyCode === 13) {
       sendNewMessage();
     }
   }
 
   const closeElement = (e) => {
 
-    if (!e) var e = window.event;
+    if (!e) e = window.event;
     e.cancelBubble = true;
     if (e.stopPropagation) e.stopPropagation();
 
@@ -103,8 +114,8 @@ const Crocubot = ({ }) => {
       <div className="chat">
         <div className="header">
           <span className="title">
-            Crocubot
-        </span>
+            {botName}
+          </span>
           <button onClick={closeElement}>
             <i className="fa fa-times" aria-hidden="true"></i>
           </button>

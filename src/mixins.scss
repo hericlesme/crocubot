@@ -1,6 +1,7 @@
+@import './variables.scss';
+
 @mixin fancy-background() {
-  background: -moz-linear-gradient(-45deg, #5BC980 0, #5BC980 25%, #5BC980 50%, #5BC980 75%, rgb(65, 145, 91) 100%);
-  background: -webkit-linear-gradient(-45deg, #5BC980 0, #5BC980 25%, #5BC980 50%, #5BC980 75%, rgb(65, 145, 91) 100%);
+  background: $chat-background;
   background-repeat: no-repeat;
   background-attachment: fixed;
 }

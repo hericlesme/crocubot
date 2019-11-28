@@ -6,7 +6,7 @@
   margin: 0 0 20px 0;
   font: 12px/16px 'Noto Sans', sans-serif;
   border-radius: 10px;
-  background-color: #515E54AA;
+  background-color: #00000055;
   word-wrap: break-word;
   max-width: 81%; }
   .messages li:before {
@@ -23,7 +23,7 @@
     content: '';
     width: 0;
     height: 0;
-    border-top: 10px solid #515E54AA; }
+    border-top: 10px solid #00000055; }
 
 .messages li.self {
   animation: show-chat-odd 0.15s 1 ease-in;
