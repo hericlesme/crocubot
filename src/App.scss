@@ -1,0 +1,16 @@
+@import 'https://fonts.googleapis.com/css?family=Noto+Sans';
+
+* {
+  box-sizing: border-box;
+}
+
+body, html, #root, .App {
+height: 100vh;
+margin: 0;
+padding: 0;
+}
+
+body {
+  background: rgb(34, 24, 56);
+  font: 12px/16px 'Noto Sans', sans-serif;
+}
