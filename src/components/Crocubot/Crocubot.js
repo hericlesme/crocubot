@@ -1,140 +1,153 @@
 import React, { useState, useEffect } from "react";
-import './Crocubot.css'
-import $ from 'jquery';
-import axios from 'axios';
+import "./Crocubot.css";
+import $ from "jquery";
+import axios from "axios";
 import Message from "../Message/Message";
 
-const Crocubot = ({ color, name }) => {
-
+const Crocubot = ({ color, name, welcomeMessage }) => {
   const [chatStatus, toggleExpansion] = useState("closed");
-  const [botName, setName] = useState('Crocubot');
+  const [botName, setName] = useState("CrocuBot");
   const [messageData, updateMessages] = useState([]);
 
   const toggle = () => {
-    toggleExpansion(chatStatus === 'closed' ? 'expanded' : 'closed');
-  }
-
+    toggleExpansion(chatStatus === "closed" ? "expanded" : "closed");
+  };
 
   const updateTheme = (color, name) => {
     if (color) {
-      let chat = document.querySelector('.floating-chat');
+      let chat = document.querySelector(".floating-chat");
       chat.style.setProperty("background", color);
     }
 
     if (name) setName(name);
-  }
+  };
 
   useEffect(() => {
     updateTheme(color, name);
-    updateMessages(messageData => [...messageData, { 'sender': 'other', 'text': 'Olá! Posso ajudar?' }]);
+    if (welcomeMessage)
+      updateMessages(messageData => [
+        ...messageData,
+        { sender: "other", text: welcomeMessage }
+      ]);
+    openElement();
   }, [color, name]);
 
-  const openElement = (e) => {
-    let element = $('.floating-chat');
-    var messages = element.find('.messages');
-    var textInput = element.find('.text-box');
-    if (chatStatus === 'closed') toggle();
-    element.find('.chat').addClass('enter');
-    textInput.keydown(onMetaAndEnter).prop("disabled", false).focus();
-    element.find('.header button').click(closeElement);
-    element.find('#sendMessage').click(sendNewMessage);
+  const openElement = e => {
+    let element = $(".floating-chat");
+    var messages = element.find(".messages");
+    var textInput = element.find(".text-box");
+    if (chatStatus === "closed") toggle();
+    element.find(".chat").addClass("enter");
+    textInput
+      .keydown(onMetaAndEnter)
+      .prop("disabled", false)
+      .focus();
+    element.find(".header button").click(closeElement);
+    element.find("#sendMessage").click(sendNewMessage);
     messages.scrollTop(messages.prop("scrollHeight"));
-  }
+  };
 
-  const appendMessage = (message) => {
-
-    let messagesContainer = $('.messages');
+  const appendMessage = message => {
+    let messagesContainer = $(".messages");
 
     updateMessages(messageData => [...messageData, message]);
 
     console.log(messageData);
-    var userInput = $('.text-box');
-    userInput.html('');
+    var userInput = $(".text-box");
+    userInput.html("");
     userInput.focus();
 
-    messagesContainer.finish().animate({
-      scrollTop: messagesContainer.prop("scrollHeight")
-    }, 250);
-  }
+    messagesContainer.finish().animate(
+      {
+        scrollTop: messagesContainer.prop("scrollHeight")
+      },
+      250
+    );
+  };
 
-  const processMessage = (message) => {
-    // loading();
-    axios.post('http://localhost:5000/chat', {
-      "message": message
-    }).then(res => {
-      appendMessage({
-        sender: 'other',
-        text: res.data
+  const processMessage = message => {
+    axios
+      .post("https://localhost:5000/chat", {
+        message: message
       })
-    })
-  }
+      .then(res => {
+        appendMessage({
+          sender: "other",
+          text: res.data
+        });
+      });
+  };
 
   const sendNewMessage = () => {
-    var userInput = $('.text-box');
-    var newMessage = userInput.html().replace(/\<div\>|\<br.*?\>/ig, '\n').replace(/\<\/div\>/g, '').trim().replace(/\n/g, '<br>');
+    var userInput = $(".text-box");
+    var newMessage = userInput.text();
 
     if (!newMessage) return;
 
     let message = {
-      sender: 'self',
+      sender: "self",
       text: newMessage
-    }
+    };
 
     appendMessage(message);
     processMessage(newMessage);
-  }
+  };
 
-  const onMetaAndEnter = (event) => {
-    if ((event.metaKey || event.ctrlKey) && event.keyCode === 13) {
+  const onMetaAndEnter = event => {
+    if (event.keyCode === 13) {
+      event.preventDefault();
       sendNewMessage();
     }
-  }
+  };
 
-  const closeElement = (e) => {
-
+  const closeElement = e => {
     if (!e) e = window.event;
     e.cancelBubble = true;
     if (e.stopPropagation) e.stopPropagation();
 
-    let element = $('.floating-chat');
+    let element = $(".floating-chat");
 
-    element.find('.chat').removeClass('enter').hide();
-    element.find('>i').show();
-    if (chatStatus === 'expanded') toggle()
-    setTimeout(function () {
-      element.find('.chat').removeClass('enter').show()
+    element
+      .find(".chat")
+      .removeClass("enter")
+      .hide();
+    element.find(">i").show();
+    if (chatStatus === "expanded") toggle();
+    setTimeout(function() {
+      element
+        .find(".chat")
+        .removeClass("enter")
+        .show();
       element.click(openElement);
     }, 500);
-
-  }
+  };
 
   return (
     <div onClick={openElement} className={`floating-chat ${chatStatus}`}>
       <i className="fa fa-comments" aria-hidden="true"></i>
       <div className="chat">
         <div className="header">
-          <span className="title">
-            {botName}
-          </span>
+          <span className="title">{botName}</span>
           <button onClick={closeElement}>
             <i className="fa fa-times" aria-hidden="true"></i>
           </button>
         </div>
         <ul className="messages">
           {messageData.map((message, index) => (
-            <Message
-              key={index}
-              sender={message.sender}
-              text={message.text} />
+            <Message key={index} sender={message.sender} text={message.text} />
           ))}
         </ul>
         <div className="footer">
-          <div className="text-box" contentEditable="true" disabled={true}></div>
+          <div
+            className="text-box"
+            contentEditable="true"
+            disabled={true}
+          ></div>
           <button id="sendMessage">Enviar</button>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default Crocubot;
