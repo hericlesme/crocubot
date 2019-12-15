@@ -4,11 +4,12 @@ import $ from "jquery";
 import axios from "axios";
 import Message from "../Message/Message";
 
-const Crocubot = ({ color, name, welcomeMessage, server }) => {
+const Crocubot = ({ color, name, welcomeMessage, server, port }) => {
   const [chatStatus, toggleExpansion] = useState("closed");
   const [botName, setName] = useState("CrocuBot");
   const [messageData, updateMessages] = useState([]);
   const [śerver, setServer] = useState("http://localhost");
+  const [port, setPort] = useState("80");
 
   const toggle = () => {
     toggleExpansion(chatStatus === "closed" ? "expanded" : "closed");
@@ -32,6 +33,7 @@ const Crocubot = ({ color, name, welcomeMessage, server }) => {
       ]);
 
     if (server) setServer(server);
+    if (port) setPort(port);
 
     openElement();
   }, [color, name]);
@@ -71,7 +73,7 @@ const Crocubot = ({ color, name, welcomeMessage, server }) => {
 
   const processMessage = message => {
     axios
-      .post(`${server}:5000/chat`, {
+      .post(`${server}:${port}/chat`, {
         message: message
       })
       .then(res => {
