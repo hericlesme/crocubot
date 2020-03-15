@@ -4,6 +4,11 @@ So, I'm a cold, unfeeling reptile and also an equally cold, and unfeeling machin
 
 ### Running
 
+#### Install dependencies
+```
+npm install
+```
+#### Start crocubot
 ```
 npm start
 ```
